@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Thai Hub">
+<title>Thai — Learning Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f6f3;--surface:#fff;--border:rgba(0,0,0,.08);--border-md:rgba(0,0,0,.13);--text:#111;--text-2:#555;--text-3:#999;--green:#1a9e6e;--gl:#e6f7f1;--gd:#0d6e4b;--purple:#5b52c8;--pl:#eeecfe;--amber:#b07020;--al:#fef3e2;--coral:#b84020;--cl:#fdf0ed;--blue:#2060b0;--bl:#e8f1fb;--r:14px;--rs:9px;--nav:68px;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);}
+body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;}
+.topbar{background:var(--bg);padding:52px 22px 12px;border-bottom:.5px solid var(--border);position:sticky;top:0;z-index:10;}
+.topbar-title{font-size:28px;font-weight:300;letter-spacing:-.5px;}
+.topbar-sub{font-size:13px;color:var(--text-3);margin-top:1px;}
+.content{flex:1;overflow-y:auto;padding:20px 18px calc(var(--nav) + 16px);}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:var(--nav);background:rgba(247,246,243,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:.5px solid var(--border);display:flex;align-items:flex-start;padding-top:8px;z-index:20;}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;color:var(--text-3);transition:color .15s;}
+.ni.active{color:var(--green);}
+.ni-icon{font-size:17px;line-height:1;}
+.ni-label{font-size:9px;}
+.screen{display:none;}.screen.active{display:block;}
+.hero{text-align:center;padding:26px 0 20px;}
+.hero-big{font-size:52px;font-weight:300;letter-spacing:-2px;line-height:1;}
+.hero-sub{font-size:13px;color:var(--text-3);margin-top:5px;}
+.card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:12px;}
+.slabel{font-size:10px;font-weight:500;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin:0 0 10px;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.stat-box{background:var(--surface);border:.5px solid var(--border);border-radius:var(--rs);padding:14px 16px;}
+.stat-n{font-size:30px;font-weight:300;letter-spacing:-1px;}
+.stat-l{font-size:11px;color:var(--text-3);margin-top:2px;}
+.prog-bg{height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+.prog-fg{height:100%;background:var(--green);border-radius:2px;transition:width .5s;}
+.prog-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text-3);margin-top:4px;}
+.today-card{border:1px solid var(--green);border-radius:var(--r);padding:16px 18px;margin-bottom:12px;}
+.today-pill{display:inline-block;background:var(--gl);color:var(--gd);font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;margin-bottom:8px;}
+.today-text{font-size:15px;color:var(--text);line-height:1.45;}
+.chips{display:flex;gap:5px;margin-top:10px;flex-wrap:wrap;}
+.chip{font-size:11px;padding:3px 10px;border-radius:20px;}
+.cg{background:var(--gl);color:var(--gd);}.cp{background:var(--pl);color:var(--purple);}.ca{background:var(--al);color:var(--amber);}.cb{background:var(--bl);color:var(--blue);}.cc{background:var(--cl);color:var(--coral);}
+.phase-row{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:.5px solid var(--border);}
+.phase-row:last-child{border-bottom:none;}
+.phase-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.phase-title{font-size:13px;font-weight:500;}
+.phase-sub{font-size:11px;color:var(--text-3);margin-top:2px;}
+.btn-main{width:100%;padding:15px;border-radius:var(--r);border:none;background:var(--green);color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;margin-top:4px;transition:opacity .15s;display:block;text-align:center;text-decoration:none;letter-spacing:.01em;}
+.btn-main:active{opacity:.8;}
+.btn-ghost{width:100%;padding:13px;border-radius:var(--r);border:.5px solid var(--border-md);background:transparent;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);cursor:pointer;margin-top:8px;}
+.r-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:.5px solid var(--border);cursor:pointer;text-decoration:none;}
+.r-row:last-child{border-bottom:none;}
+.r-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.r-ico-txt{font-size:12px;font-weight:500;font-family:'DM Mono',monospace;}
+.r-info{flex:1;min-width:0;}
+.r-name{font-size:13px;font-weight:500;color:var(--text);}
+.r-desc{font-size:11px;color:var(--text-3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.r-badge{font-size:10px;padding:3px 8px;border-radius:10px;flex-shrink:0;}
+.r-arrow{font-size:18px;color:var(--text-3);}
+.chk-row{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:.5px solid var(--border);cursor:pointer;}
+.chk-row:last-child{border-bottom:none;}
+.chk-box{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--border-md);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .15s;}
+.chk-box.on{background:var(--green);border-color:var(--green);}
+.tick{width:10px;height:7px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px);display:none;}
+.chk-box.on .tick{display:block;}
+.chk-lbl{font-size:13px;color:var(--text);line-height:1.5;flex:1;}
+.chk-lbl.done{color:var(--text-3);text-decoration:line-through;}
+.chk-sub{font-size:11px;color:var(--text-3);margin-top:2px;}
+textarea{width:100%;border:.5px solid var(--border-md);border-radius:var(--rs);padding:12px 14px;font-size:14px;color:var(--text);background:var(--surface);resize:none;font-family:'DM Sans',sans-serif;line-height:1.5;}
+textarea:focus{outline:none;border-color:var(--green);}
+.note-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--rs);padding:12px 14px;margin-bottom:8px;}
+.note-meta{font-size:10px;color:var(--text-3);margin-bottom:5px;display:flex;justify-content:space-between;}
+.note-del{color:var(--text-3);cursor:pointer;font-size:11px;}
+.note-body{font-size:13px;color:var(--text);line-height:1.6;white-space:pre-wrap;word-break:break-word;}
+.empty-state{text-align:center;padding:40px 0;color:var(--text-3);font-size:13px;}
+.step-tag{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;margin-bottom:8px;letter-spacing:.04em;}
+.tl{background:var(--bl);color:var(--blue);}.ts{background:var(--gl);color:var(--gd);}.tc{background:var(--al);color:var(--amber);}.tr{background:var(--pl);color:var(--purple);}
+.step-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:6px;}
+.step-body{font-size:13px;color:var(--text-2);line-height:1.7;}
+.phrase-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:.5px solid var(--border);}
+.phrase-row:last-child{border-bottom:none;padding-bottom:0;}
+.phrase-texts{flex:1;}
+.phrase-thai{font-size:17px;color:var(--text);}
+.phrase-rom{font-size:12px;color:var(--gd);font-style:italic;margin-top:1px;}
+.phrase-eng{font-size:11px;color:var(--text-3);margin-top:1px;}
+.speak-btn{background:var(--gl);border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:15px;transition:background .15s;}
+.speak-btn:active{background:#c5ede0;}
+.speak-btn.playing{background:var(--green);}
+.tip-box{border-radius:var(--rs);padding:11px 13px;margin-top:8px;font-size:12px;line-height:1.6;}
+.lyric-block{background:var(--surface);border:.5px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:10px;}
+.lyric-line{padding:8px 0;border-bottom:.5px solid var(--border);}
+.lyric-line:last-child{border-bottom:none;}
+.lyric-thai{font-size:16px;color:var(--text);line-height:1.8;margin-bottom:4px;}
+.lyric-rom{font-size:12px;color:var(--gd);font-style:italic;margin-bottom:2px;}
+.lyric-eng{font-size:12px;color:var(--text-3);}
+.word-row{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:.5px solid var(--border);}
+.word-row:last-child{border-bottom:none;}
+.word-thai{font-size:15px;color:var(--text);min-width:80px;}
+.word-rom{font-size:11px;color:var(--gd);font-style:italic;}
+.word-eng{font-size:11px;color:var(--text-3);margin-top:1px;}
+.pb{flex:1;padding:10px 6px;border-radius:var(--rs);border:.5px solid var(--border-md);background:transparent;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);cursor:pointer;transition:all .15s;}
+.pb.active{background:var(--green);color:#fff;border-color:var(--green);}
+.pb[disabled]{opacity:.35;cursor:default;}
+.settings-title{font-size:14px;font-weight:500;color:var(--text);}
+.settings-desc{font-size:12px;color:var(--text-3);margin-top:3px;line-height:1.5;}
+.export-box{background:var(--bg);border:.5px solid var(--border-md);border-radius:var(--rs);padding:12px 14px;font-size:12px;font-family:'DM Mono',monospace;color:var(--text-2);word-break:break-all;line-height:1.6;margin-top:10px;max-height:120px;overflow-y:auto;}
+.fc-scene{perspective:1000px;width:100%;height:200px;cursor:pointer;margin-bottom:16px;}
+.fc-card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s ease;}
+.fc-card.flipped{transform:rotateY(180deg);}
+.fc-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;}
+.fc-front{background:var(--green);color:#fff;border:.5px solid var(--green);}
+.fc-back{background:var(--surface);border:.5px solid var(--border);transform:rotateY(180deg);}
+.fc-thai{font-size:38px;font-weight:300;letter-spacing:-1px;margin-bottom:6px;}
+.fc-tap{font-size:11px;opacity:.7;margin-top:8px;}
+.fc-rom{font-size:18px;color:var(--gd);font-style:italic;margin-bottom:4px;}
+.fc-eng{font-size:14px;color:var(--text-2);}
+.fc-cat{font-size:10px;font-weight:500;letter-spacing:.06em;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:10px;}
+.fc-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.fc-counter{font-size:13px;color:var(--text-3);}
+.fc-actions{display:flex;gap:8px;margin-top:4px;}
+.fc-btn{flex:1;padding:12px;border-radius:var(--rs);border:none;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:opacity .15s;}
+.fc-btn:active{opacity:.75;}
+.fc-again{background:var(--cl);color:var(--coral);}
+.fc-got{background:var(--gl);color:var(--gd);}
+.fc-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.fc-tag{font-size:11px;padding:4px 10px;border-radius:20px;border:.5px solid var(--border-md);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--text-3);transition:all .15s;}
+.fc-tag.on{background:var(--green);color:#fff;border-color:var(--green);}
+.note-type-btn{flex:1;padding:10px 8px;border-radius:var(--rs);border:.5px solid var(--border-md);background:transparent;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text-3);cursor:pointer;transition:all .15s;}
+.note-type-btn.active{background:var(--text);color:#fff;border-color:var(--text);}
+.wild-field{margin-bottom:10px;}
+.wild-label{font-size:10px;font-weight:500;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.wild-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--rs);padding:12px 14px;margin-bottom:8px;}
+.wild-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.wild-badge{display:inline-block;background:var(--al);color:var(--amber);font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;}
+.wild-thai{font-size:18px;color:var(--text);margin-bottom:6px;line-height:1.5;}
+.wild-section{margin-bottom:5px;}
+.wild-section-lbl{font-size:9px;font-weight:500;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;}
+.wild-section-val{font-size:12px;color:var(--text-2);margin-top:2px;line-height:1.5;}
+.wild-section-val.guess{color:var(--blue);font-style:italic;}
+.wild-section-val.actual{color:var(--gd);font-weight:500;}
+.fc-tag.on{background:var(--green);color:#fff;border-color:var(--green);}
+.toast{position:fixed;bottom:calc(var(--nav) + 16px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;font-size:13px;padding:10px 20px;border-radius:20px;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;z-index:100;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.chat-banner{background:var(--gl);border:1px solid var(--green);border-radius:var(--r);padding:16px 18px;margin-bottom:12px;}
+.chat-banner-title{font-size:15px;font-weight:500;color:var(--gd);margin-bottom:4px;}
+.chat-banner-body{font-size:13px;color:var(--gd);line-height:1.6;margin-bottom:12px;}
+.sg{margin-top:20px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title" id="topbar-title">Thai</div>
+  <div class="topbar-sub" id="topbar-sub">Your learning hub</div>
+</div>
+
+<div class="content">
+
+<!-- HOME -->
+<div id="s-home" class="screen active">
+  <div class="hero">
+    <div class="hero-big" id="ov-lessons">0</div>
+    <div class="hero-sub">lessons completed</div>
+  </div>
+  <div id="chat-banner-container"></div>
+  <div class="today-card">
+    <div class="today-pill">Today's prompt</div>
+    <div class="today-text" id="ov-prompt">Loading...</div>
+    <div class="chips" id="ov-chips"></div>
+  </div>
+  <div class="stat-grid">
+    <div class="stat-box"><div class="stat-n" id="ov-sessions">0</div><div class="stat-l">sessions done</div></div>
+    <div class="stat-box"><div class="stat-n" id="ov-streak">0</div><div class="stat-l">week streak</div></div>
+  </div>
+  <div class="card">
+    <div class="slabel" style="margin-bottom:10px;">Progress to Billkin concert 🎵</div>
+    <div class="prog-bg"><div class="prog-fg" id="ov-prog" style="width:0%"></div></div>
+    <div class="prog-labels"><span>Beginner</span><span id="ov-phase-lbl">Week 1</span><span>Concert ready</span></div>
+  </div>
+  <div class="card">
+    <div class="phase-row"><div class="phase-dot" style="background:var(--green);"></div><div><div class="phase-title">Phase 1 — Foundations</div><div class="phase-sub">Months 1–2 · Tones, greetings, numbers</div></div></div>
+    <div class="phase-row"><div class="phase-dot" style="background:var(--purple);"></div><div><div class="phase-title">Phase 2 — Survival phrases</div><div class="phase-sub">Months 3–4 · Food, transport, shopping</div></div></div>
+    <div class="phase-row"><div class="phase-dot" style="background:var(--coral);"></div><div><div class="phase-title">Phase 3 — Concert ready</div><div class="phase-sub">Months 5–6 · Speaking + fan phrases</div></div></div>
+  </div>
+  <button class="btn-main" onclick="logSession()">Log completed session</button>
+</div>
+
+<!-- LESSONS -->
+<div id="s-lessons" class="screen">
+  <div class="hero" style="padding-bottom:14px;">
+    <div class="hero-big" id="lesson-week">Week 1</div>
+    <div class="hero-sub" id="lesson-sub">Greetings &amp; Tones</div>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:16px;">
+    <button class="pb" id="lb-prev" onclick="changeLesson(-1)">← Prev</button>
+    <button class="pb" id="lb-next" onclick="changeLesson(1)">Next →</button>
+  </div>
+  <div id="lesson-content"></div>
+  <button class="btn-main" onclick="logLesson()" style="margin-top:8px;">Mark lesson done ✓</button>
+</div>
+
+<!-- SONG -->
+<div id="s-song" class="screen">
+  <div class="hero" style="padding-bottom:14px;">
+    <div style="font-size:12px;color:var(--text-3);margin-bottom:4px;">Billkin · Song breakdown</div>
+    <div class="hero-big" style="font-size:26px;letter-spacing:-1px;line-height:1.2;" id="song-title">Golden Hour</div>
+    <div class="hero-sub" id="song-sub">โกลเดน อาวร์</div>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:16px;">
+    <button class="pb" id="sb-prev" onclick="changeSong(-1)">← Prev</button>
+    <button class="pb" id="sb-next" onclick="changeSong(1)">Next →</button>
+  </div>
+  <div id="song-content"></div>
+  <a class="btn-main" id="song-am-link" href="#" target="_blank" style="background:var(--coral);margin-top:4px;">🎵 Listen on Apple Music</a>
+</div>
+
+<!-- RESOURCES -->
+<div id="s-resources" class="screen">
+  <div class="slabel" style="margin-top:4px;">Apps — install these</div>
+  <div class="card" style="margin-top:10px;">
+    <a class="r-row" href="https://apps.apple.com/app/ling-learn-languages/id1403783779" target="_blank">
+      <div class="r-ico" style="background:var(--gl);">🟢</div>
+      <div class="r-info"><div class="r-name">Ling App</div><div class="r-desc">Lessons, tones, Thai script — use daily</div></div>
+      <span class="r-badge cg">Daily</span>
+    </a>
+    <a class="r-row" href="https://apps.apple.com/app/hellotalk/id557130558" target="_blank">
+      <div class="r-ico" style="background:var(--al);">🟡</div>
+      <div class="r-info"><div class="r-name">HelloTalk</div><div class="r-desc">Chat with native Thai speakers</div></div>
+      <span class="r-badge ca">Month 3+</span>
+    </a>
+    <a class="r-row" href="https://apps.apple.com/app/write-me-thai-alphabet/id1174462320" target="_blank">
+      <div class="r-ico" style="background:var(--cl);"><span class="r-ico-txt" style="color:var(--coral);">WT</span></div>
+      <div class="r-info"><div class="r-name">Write Thai</div><div class="r-desc">Learn Thai script stroke by stroke</div></div>
+      <span class="r-badge cc">Month 3+</span>
+    </a>
+  </div>
+  <div class="slabel sg">YouTube</div>
+  <div class="card" style="margin-top:10px;">
+    <a class="r-row" href="https://www.youtube.com/@LearnThaiWithMod" target="_blank">
+      <div class="r-ico" style="background:var(--cl);"><span class="r-ico-txt" style="color:var(--coral);">YT</span></div>
+      <div class="r-info"><div class="r-name">Learn Thai with Mod</div><div class="r-desc">Beginner lessons — start from video 1</div></div>
+      <span class="r-arrow">›</span>
+    </a>
+    <a class="r-row" href="https://www.youtube.com/@PodcastThai" target="_blank">
+      <div class="r-ico" style="background:var(--cl);"><span class="r-ico-txt" style="color:var(--coral);">YT</span></div>
+      <div class="r-info"><div class="r-name">Podcast Thai</div><div class="r-desc">Slow Thai dialogues with subtitles</div></div>
+      <span class="r-arrow">›</span>
+    </a>
+    <a class="r-row" href="https://www.youtube.com/@ThaiPod101" target="_blank">
+      <div class="r-ico" style="background:var(--cl);"><span class="r-ico-txt" style="color:var(--coral);">YT</span></div>
+      <div class="r-info"><div class="r-name">ThaiPod101</div><div class="r-desc">Structured audio lessons — all levels</div></div>
+      <span class="r-arrow">›</span>
+    </a>
+  </div>
+  <div class="slabel sg">TikTok</div>
+  <div class="card" style="margin-top:10px;">
+    <a class="r-row" href="https://www.tiktok.com/tag/learnthaiwithtiktok" target="_blank">
+      <div class="r-ico" style="background:var(--bl);"><span class="r-ico-txt" style="color:var(--blue);">TK</span></div>
+      <div class="r-info"><div class="r-name">#learnthaiwithtiktok</div><div class="r-desc">Short vocab and phrase clips</div></div>
+      <span class="r-arrow">›</span>
+    </a>
+    <a class="r-row" href="https://www.tiktok.com/search?q=ภาษาไทย" target="_blank">
+      <div class="r-ico" style="background:var(--bl);"><span class="r-ico-txt" style="color:var(--blue);">TK</span></div>
+      <div class="r-info"><div class="r-name">ภาษาไทย</div><div class="r-desc">Native Thai content — ear training</div></div>
+      <span class="r-arrow">›</span>
+    </a>
+  </div>
+  <div class="slabel sg">App settings</div>
+  <div class="card" style="margin-top:10px;">
+    <a class="r-row" onclick="nav('settings',document.querySelector('.ni:last-child'))" style="cursor:pointer;">
+      <div class="r-ico" style="background:var(--bg);font-size:20px;">⚙</div>
+      <div class="r-info"><div class="r-name">Settings</div><div class="r-desc">Backup, restore, reset data</div></div>
+      <span class="r-arrow">›</span>
+    </a>
+  </div>
+</div>
+
+<!-- FLASHCARDS -->
+<div id="s-cards" class="screen">
+  <div class="hero" style="padding-bottom:14px;">
+    <div class="hero-big" id="fc-score">0</div>
+    <div class="hero-sub">cards learned</div>
+  </div>
+
+  <div class="fc-filter" id="fc-filter"></div>
+
+  <div class="fc-nav">
+    <span class="fc-counter" id="fc-counter">Card 1 of 1</span>
+    <button class="speak-btn" id="fc-speak-btn" onclick="fcSpeak()" style="width:34px;height:34px;">🔊</button>
+  </div>
+
+  <div class="fc-scene" onclick="fcFlip()">
+    <div class="fc-card" id="fc-card">
+      <div class="fc-face fc-front">
+        <div class="fc-cat" id="fc-cat">Greetings</div>
+        <div class="fc-thai" id="fc-thai">สวัสดี</div>
+        <div class="fc-tap">tap to reveal</div>
+      </div>
+      <div class="fc-face fc-back">
+        <div class="fc-rom" id="fc-rom">sa-wat-dee</div>
+        <div class="fc-eng" id="fc-eng">Hello</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fc-actions">
+    <button class="fc-btn fc-again" onclick="fcAgain()">← Again</button>
+    <button class="fc-btn fc-got" onclick="fcGot()">Got it ✓</button>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="slabel" style="margin-bottom:6px;">Session progress</div>
+    <div class="prog-bg"><div class="prog-fg" id="fc-prog" style="width:0%"></div></div>
+    <div style="font-size:11px;color:var(--text-3);margin-top:4px;" id="fc-prog-label">0 of 0 done this session</div>
+  </div>
+
+  <button class="btn-ghost" onclick="fcShuffle()" style="margin-top:4px;">Shuffle deck 🔀</button>
+</div>
+
+<!-- NOTES -->
+<div id="s-notes" class="screen">
+
+  <!-- Note type toggle -->
+  <div style="display:flex;gap:8px;margin-top:4px;margin-bottom:16px;">
+    <button class="note-type-btn active" id="ntb-note" onclick="switchNoteType('note',this)">📝 Note</button>
+    <button class="note-type-btn" id="ntb-wild" onclick="switchNoteType('wild',this)">🌿 Caught in the wild</button>
+  </div>
+
+  <!-- Regular note form -->
+  <div id="note-form">
+    <textarea id="note-input" rows="4" placeholder="What did you learn today? New words, phrases, wins..."></textarea>
+    <button class="btn-main" style="margin-top:8px;" onclick="saveNote()">Save note</button>
+  </div>
+
+  <!-- Caught in the wild form -->
+  <div id="wild-form" style="display:none;">
+    <div class="wild-field">
+      <div class="wild-label">Thai text from X / online</div>
+      <textarea id="wild-thai" rows="2" placeholder="Paste the Thai text here e.g. โอ้โห ปังมากเลย"></textarea>
+    </div>
+    <div class="wild-field">
+      <div class="wild-label">Your guess — what do you think it means?</div>
+      <textarea id="wild-guess" rows="2" placeholder="e.g. Something like 'wow so cool'?"></textarea>
+    </div>
+    <div class="wild-field">
+      <div class="wild-label">Actual meaning (after translating)</div>
+      <textarea id="wild-actual" rows="2" placeholder="e.g. 'Oh wow, so fierce/stunning!' — 'ปัง' = slay/stunning slang"></textarea>
+    </div>
+    <div class="wild-field">
+      <div class="wild-label">Context — where did you see it?</div>
+      <textarea id="wild-context" rows="1" placeholder="e.g. Billkin's fan account, reply to a photo"></textarea>
+    </div>
+    <button class="btn-main" style="margin-top:8px;background:var(--amber);" onclick="saveWild()">Save catch 🌿</button>
+  </div>
+
+  <!-- All entries -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;margin-bottom:10px;">
+    <div class="slabel" style="margin:0;">All entries</div>
+    <div style="display:flex;gap:6px;">
+      <button class="fc-tag on" id="filter-all" onclick="filterNotes('all',this)">All</button>
+      <button class="fc-tag" id="filter-notes" onclick="filterNotes('note',this)">📝</button>
+      <button class="fc-tag" id="filter-wilds" onclick="filterNotes('wild',this)">🌿</button>
+    </div>
+  </div>
+  <div id="notes-list"></div>
+</div>
+
+<!-- SETTINGS -->
+<div id="s-settings" class="screen">
+  <div class="slabel" style="margin-top:4px;">Backup &amp; restore</div>
+  <div class="card" style="margin-top:10px;">
+    <div class="settings-title">Export backup</div>
+    <div class="settings-desc">Copy all your data — paste into Notes app or email to yourself</div>
+    <button class="btn-main" style="margin-top:12px;" onclick="exportData()">Export my data</button>
+  </div>
+  <div class="card">
+    <div class="settings-title">Import backup</div>
+    <div class="settings-desc">Paste previously exported data to restore</div>
+    <textarea id="import-input" rows="3" style="margin-top:12px;" placeholder="Paste backup text here..."></textarea>
+    <button class="btn-ghost" onclick="importData()">Import &amp; restore</button>
+  </div>
+  <div class="slabel sg">Phase</div>
+  <div class="card" style="margin-top:10px;">
+    <div class="settings-desc" style="margin-bottom:12px;">Manually set your current phase if needed</div>
+    <div style="display:flex;gap:8px;">
+      <button class="pb" onclick="setPhase(1)" id="pb1">Phase 1</button>
+      <button class="pb" onclick="setPhase(2)" id="pb2">Phase 2</button>
+      <button class="pb" onclick="setPhase(3)" id="pb3">Phase 3</button>
+    </div>
+  </div>
+  <div class="slabel sg">Danger zone</div>
+  <div class="card" style="margin-top:10px;">
+    <div class="settings-title">Reset all data</div>
+    <div class="settings-desc">Clears everything. Export first if you want a backup.</div>
+    <button class="btn-ghost" style="margin-top:12px;color:var(--coral);border-color:rgba(184,64,32,.25);" onclick="resetAll()">Reset everything</button>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<div class="bottom-nav">
+  <div class="ni active" onclick="nav('home',this)"><div class="ni-icon">◎</div><div class="ni-label">Home</div></div>
+  <div class="ni" onclick="nav('lessons',this)"><div class="ni-icon">🎧</div><div class="ni-label">Lessons</div></div>
+  <div class="ni" onclick="nav('song',this)"><div class="ni-icon">♪</div><div class="ni-label">Song</div></div>
+  <div class="ni" onclick="nav('notes',this)"><div class="ni-icon">✎</div><div class="ni-label">Notes</div></div>
+  <div class="ni" onclick="nav('cards',this)"><div class="ni-icon">🃏</div><div class="ni-label">Cards</div></div>
+  <div class="ni" onclick="nav('resources',this)"><div class="ni-icon">⊞</div><div class="ni-label">More</div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CHECKS=[
+  {id:'c1',l:'Download Ling App',s:'App Store — free'},
+  {id:'c2',l:'Download Drops',s:'App Store — 5 min/day vocab, free'},
+  {id:'c3',l:'Download HelloTalk',s:'Free — use from Month 3'},
+  {id:'c4',l:'Download Write Thai',s:'App Store — learn Thai script'},
+  {id:'c5',l:'Select Thai in Ling App',s:'Set level to Beginner / A1'},
+  {id:'c6',l:'Set evening reminder in Ling',s:'Settings → Reminders → pick a time'},
+  {id:'c7',l:'Complete Ling Unit 1 — Greetings',s:'~15 min, do tonight'},
+  {id:'c8',l:'Search Thai sets on Quizlet',s:'Search "Thai vocabulary beginner"'},
+  {id:'c9',l:'Subscribe to Learn Thai with Mod',s:'YouTube — start from video 1'},
+  {id:'c10',l:'Subscribe to Podcast Thai',s:'YouTube — save for Month 2'},
+  {id:'c11',l:'Follow #learnthaiwithtiktok',s:'Like 5–6 videos to train feed'},
+  {id:'c12',l:'Block commute slots in calendar',s:'Even 15 min each way counts'},
+];
+
+const PROMPTS=[
+  {t:"Open Ling App and finish today's lesson",a:['Ling'],c:['cg']},
+  {t:"Do your Drops session — 5 min Thai vocab",a:['Drops'],c:['cp']},
+  {t:"Watch one video on Learn Thai with Mod",a:['YouTube'],c:['cc']},
+  {t:"Practice tones — say kha / krap out loud",a:['Ling'],c:['cg']},
+  {t:"Scroll #learnthaiwithtiktok for 10 minutes",a:['TikTok'],c:['cb']},
+  {t:"Listen to a Podcast Thai episode",a:['YouTube'],c:['cc']},
+  {t:"Write 5 Thai words you know in Notes",a:['Notes'],c:['cp']},
+  {t:"Open this week's song and study the lyrics",a:['Song tab'],c:['ca']},
+];
+
+const LESSONS=[
+  {week:1,title:'Greetings & Tones',steps:[
+    {tag:'tl',label:'LISTEN FIRST',title:'Thai has 5 tones',body:'Thai tones change meaning completely. "Maa" can mean come, horse, or dog depending on tone. Don\'t stress about perfecting them — just know they exist and listen for the rise and fall in speech.'},
+    {tag:'ts',label:'SPEAK ALOUD',title:'Your first phrases',phrases:[
+      {t:'สวัสดีครับ',r:'sa-wat-dee kráp',e:'Hello (male speaker)'},
+      {t:'สวัสดีค่ะ',r:'sa-wat-dee kâ',e:'Hello (female speaker)'},
+      {t:'ขอบคุณครับ/ค่ะ',r:'khàwp-khun kráp/kâ',e:'Thank you'},
+      {t:'ไม่เป็นไร',r:'mâi bpen rai',e:'No worries / You\'re welcome'},
+    ]},
+    {tag:'tc',label:'CULTURE NOTE',title:'Kráp vs Kâ',body:'Men say "kráp" (ครับ), women say "kâ" (ค่ะ). Add it to every sentence — it\'s the easiest way to sound respectful in Thai instantly.'},
+    {tag:'tr',label:'PRACTICE',title:'Say it 3 times',body:'Say "sawatdee kráp/kâ" aloud three times before your stop. Smile while saying it — Thais always greet with a smile and it genuinely helps pronunciation.'},
+  ]},
+  {week:2,title:'Numbers 1–10',steps:[
+    {tag:'tl',label:'CONTEXT',title:'Why numbers first',body:'Numbers unlock prices, addresses, phone numbers and time. At a market or 7-Eleven you\'ll use them constantly. Commit these to memory this week.'},
+    {tag:'ts',label:'SPEAK ALOUD',title:'Numbers 1–10',phrases:[
+      {t:'หนึ่ง',r:'nèung',e:'1'},{t:'สอง',r:'sǎwng',e:'2'},{t:'สาม',r:'sǎam',e:'3'},
+      {t:'สี่',r:'sèe',e:'4'},{t:'ห้า',r:'hâa',e:'5'},{t:'หก',r:'hòk',e:'6'},
+      {t:'เจ็ด',r:'jèt',e:'7'},{t:'แปด',r:'bpàet',e:'8'},{t:'เก้า',r:'gâo',e:'9'},
+      {t:'สิบ',r:'sìp',e:'10'},
+    ]},
+    {tag:'tc',label:'TIP',title:'Bargaining opener',body:'"Tâo-rài?" (เท่าไร) means "How much?" Pair it with pointing and numbers and you can bargain at any Thai market.'},
+    {tag:'tr',label:'PRACTICE',title:'Count your stops',body:'Count each MRT stop in Thai as you pass them. By the time you arrive, 1–10 will be locked in memory.'},
+  ]},
+  {week:3,title:'Food & Ordering',steps:[
+    {tag:'tl',label:'SCENE',title:'At a Thai restaurant',body:'Singapore has tons of Thai restaurants. This week gets you ready to order in Thai — even just trying will make the staff smile and give you real live practice.'},
+    {tag:'ts',label:'SPEAK ALOUD',title:'Ordering phrases',phrases:[
+      {t:'ขอ...หน่อย',r:'khǎaw ... nòi',e:'Can I have... please'},
+      {t:'ไม่เผ็ด',r:'mâi pèt',e:'Not spicy'},
+      {t:'เผ็ดน้อย',r:'pèt nói',e:'A little spicy'},
+      {t:'อร่อย',r:'a-ròi',e:'Delicious!'},
+      {t:'เก็บเงิน',r:'gèp ngern',e:'Bill please'},
+      {t:'น้ำเปล่า',r:'náam bplào',e:'Plain water'},
+    ]},
+    {tag:'tc',label:'CULTURE',title:'"A-roi mak!"',body:'"อร่อยมาก!" (a-ròi mâak) means "Very delicious!" — saying this to whoever cooked your food is one of the warmest gestures in Thai culture.'},
+    {tag:'tr',label:'CHALLENGE',title:'Try it this week',body:'At your next Thai restaurant in Singapore, order at least one item in Thai. Even just "khǎaw nám bplào nòi" (water please) counts. Do it.'},
+  ]},
+  {week:4,title:'Getting Around',steps:[
+    {tag:'tl',label:'SCENE',title:'In a Grab or taxi',body:'Knowing these phrases means you can navigate Bangkok confidently — and avoid tourist pricing in taxis.'},
+    {tag:'ts',label:'SPEAK ALOUD',title:'Transport phrases',phrases:[
+      {t:'ไปที่...',r:'bpai têe ...',e:'Go to...'},
+      {t:'จอดตรงนี้',r:'jàwt dtrong née',e:'Stop here'},
+      {t:'ซ้าย',r:'sáai',e:'Left'},
+      {t:'ขวา',r:'khwǎa',e:'Right'},
+      {t:'ตรงไป',r:'dtrong bpai',e:'Straight ahead'},
+      {t:'ใกล้ / ไกล',r:'glâi / glai',e:'Near / Far'},
+    ]},
+    {tag:'tc',label:'CONCERT PREP 🎵',title:'Billkin June show',body:'"Bpai têe [venue name] kráp/kâ" — say this to any Grab driver and you\'ll arrive without confusion. You\'ve got this.'},
+    {tag:'tr',label:'PRACTICE',title:'Visualise it',body:'Close your eyes. You\'re in a Grab to Billkin\'s concert. Say: "Bpai têe [venue] kráp/kâ." Then: "Jàwt dtrong née kráp/kâ." Out loud, right now on the train.'},
+  ]},
+  {week:5,title:'Feelings & Reactions',steps:[
+    {tag:'tl',label:'WHY THIS',title:'Express yourself',body:'At a concert you want to shout excitement, happiness, love. This week is pure emotional vocabulary — the words you\'ll actually want to yell at Billkin\'s show.'},
+    {tag:'ts',label:'SPEAK ALOUD',title:'Emotion words',phrases:[
+      {t:'ดีใจ',r:'dee jai',e:'Happy / glad'},
+      {t:'ตื่นเต้น',r:'dtèun dtên',e:'Excited'},
+      {t:'รัก',r:'rák',e:'Love'},
+      {t:'ชอบ',r:'châwp',e:'Like'},
+      {t:'เจ๋ง',r:'jěng',e:'Awesome / cool (slang)'},
+      {t:'โอโห',r:'oh-hǒh',e:'Wow!'},
+      {t:'สนุก',r:'sa-nùk',e:'Fun'},
+    ]},
+    {tag:'tc',label:'FAN CULTURE',title:'Thai fandom energy',body:'Thai fandoms are extraordinarily passionate. Knowing "dtèun dtên mâak!" (so excited!) and "rák Billkin!" puts you right inside the crowd energy.'},
+    {tag:'tr',label:'PRACTICE',title:'Describe right now',body:'How do you feel right now? Tired? "nèuai" (เหนื่อย). Excited about June? "dtèun dtên mâak!" Say it out loud on the train. Nobody knows what you\'re doing.'},
+  ]},
+  {week:6,title:'Concert Phrases',steps:[
+    {tag:'tl',label:'IT\'S JUNE',title:'You made it',body:'All the phrases you\'d say or hear at Billkin\'s Singapore show — to other fans, in the crowd, and maybe even at him.'},
+    {tag:'ts',label:'SPEAK ALOUD',title:'Concert vocab',phrases:[
+      {t:'บิลกิ้นหล่อมาก',r:'Billkin làw mâak',e:'Billkin is so handsome'},
+      {t:'ฉันรอวันนี้นานมาก',r:'chǎn raw wan née naan mâak',e:'I\'ve waited so long for today'},
+      {t:'เพลงนี้ฉันชอบมาก',r:'pleyng née chǎn châwp mâak',e:'I love this song so much'},
+      {t:'คุณมาจากไหน',r:'khun maa jàak nǎi',e:'Where are you from?'},
+      {t:'ฉันมาจากสิงคโปร์',r:'chǎn maa jàak Sing-khá-poh',e:'I\'m from Singapore'},
+    ]},
+    {tag:'tc',label:'FAN TIP',title:'Thais will love you',body:'Try even one phrase to Thai fans and they will absolutely lose their minds — in the best way. "Bpraytet Thai sǔay mâak" (Thailand is so beautiful) is another crowd-pleaser.'},
+    {tag:'tr',label:'YOU\'RE READY',title:'Say it with energy',body:'Say "Billkin làw mâak!" three times with full concert energy. Practise "chǎn maa jàak Sing-khá-poh" for when you meet Thai fans. You\'ve got this. 🎵'},
+  ]},
+];
+
+const SONGS=[
+  {
+    title:'Golden Hour',sub:'โกลเดน อาวร์',artist:'Billkin',year:'2024',
+    am:'https://music.apple.com/us/song/golden-hour/1771391581',
+    genius:'https://genius.com/search?q=Billkin+Golden+Hour',
+    context:'Billkin\'s most recent release (2024) — a warm, glowing love song. The tempo is unhurried, making every word catchable. Perfect first song to study because the emotion is immediate and vocabulary is learnable.',
+    excerpt:[
+      {t:'ในช่วงเวลาทองคำ',r:'nai chûang weh-laa tawng-kam',e:'In the golden hour',key:true},
+      {t:'ฉันอยากอยู่กับเธอ',r:'chǎn yàak yùu gàp ter',e:'I want to be with you',key:true},
+      {t:'แสงสุดท้ายก่อนค่ำ',r:'sǎeng sùt tâai gàwn khâm',e:'The last light before evening',key:true},
+      {t:'มันงดงามเพราะเธอ',r:'man ngot ngaam práw ter',e:'It\'s beautiful because of you',key:true},
+      {t:'อยู่ตรงนี้กับฉัน',r:'yùu dtrong née gàp chǎn',e:'Stay right here with me',key:false},
+      {t:'ในวันที่ดีที่สุด',r:'nai wan têe dee têe sùt',e:'On the best of days',key:false},
+      {t:'เธอคือทุกอย่างของฉัน',r:'ter khue túk yàang khǎwng chǎn',e:'You are everything to me',key:false},
+      {t:'อย่าไปไหนเลย',r:'yàa bpai nǎi loei',e:'Don\'t go anywhere',key:false},
+    ],
+    words:[
+      {t:'ช่วงเวลา',r:'chûang weh-laa',e:'Period of time — "weh-laa" = time'},
+      {t:'ทองคำ',r:'tawng-kam',e:'Gold / golden — very common word'},
+      {t:'อยาก',r:'yàak',e:'Want — one of the most-used Thai verbs'},
+      {t:'อยู่กับ',r:'yùu gàp',e:'Be with / stay with'},
+      {t:'แสง',r:'sǎeng',e:'Light — appears everywhere in Thai lyrics'},
+      {t:'งดงาม',r:'ngot ngaam',e:'Beautiful / graceful — poetic word'},
+    ],
+    tip:'Focus on "yàak" (อยาก, want). Once you know it you can say what you want: "yàak gin aa-hǎan thai" = I want Thai food. Endlessly useful.',
+  },
+  {
+    title:'กีดกัน (Skyline)',sub:'Gèet-gan — From I Told Sunset About You',artist:'Billkin',year:'2020',
+    am:'https://music.apple.com/us/album/%E0%B8%81-%E0%B8%94%E0%B8%81-%E0%B8%99-skyline-from-%E0%B9%81%E0%B8%9B%E0%B8%A5%E0%B8%A3-%E0%B8%81%E0%B8%89-%E0%B8%99%E0%B8%94-%E0%B8%A7%E0%B8%A2%E0%B9%83%E0%B8%88%E0%B9%80%E0%B8%98%E0%B8%AD-original-soundtrack/1577034182',
+    genius:'https://genius.com/search?q=Billkin+Skyline+กีดกัน',
+    context:'From the beloved series "I Told Sunset About You" (แปลรักฉันด้วยใจเธอ). A song about longing and distance — two people separated by something invisible. Billkin\'s voice is very clear in this track.',
+    excerpt:[
+      {t:'กีดกันเราไว้ตรงไหน',r:'gèet-gan rao wái dtrong nǎi',e:'What is keeping us apart',key:true},
+      {t:'ทำไมมันต้องมีกำแพง',r:'tam-mai man dtâwng mee gam-paeng',e:'Why does there have to be a wall',key:true},
+      {t:'ระหว่างเธอกับฉัน',r:'rá-wàang ter gàp chǎn',e:'Between you and me',key:true},
+      {t:'ฉันยังคิดถึงเธออยู่',r:'chǎn yang khít-tǔeng ter yùu',e:'I still miss you',key:true},
+      {t:'ฟ้ากั้นเราไว้ข้างไหน',r:'fáa gân rao wái khâang nǎi',e:'Which side of the sky keeps us apart',key:false},
+      {t:'ถึงห่างกันก็ยังอยู่ในใจ',r:'tǔeng hàang gan gâw yang yùu nai jai',e:'Even far apart you\'re still in my heart',key:false},
+      {t:'รอวันที่เราจะได้พบกัน',r:'raw wan têe rao jà dâai póp gan',e:'Waiting for the day we\'ll meet again',key:false},
+      {t:'ฉันไม่เคยลืมเธอเลย',r:'chǎn mâi koei leum ter loei',e:'I have never forgotten you',key:false},
+    ],
+    words:[
+      {t:'กีดกัน',r:'gèet-gan',e:'Obstruct / keep apart — the song\'s title'},
+      {t:'กำแพง',r:'gam-paeng',e:'Wall / barrier — literal and emotional'},
+      {t:'ระหว่าง',r:'rá-wàang',e:'Between — very useful preposition'},
+      {t:'คิดถึง',r:'khít-tǔeng',e:'Miss / think of — used constantly'},
+      {t:'ยัง',r:'yang',e:'Still — shows something continues'},
+      {t:'ทำไม',r:'tam-mai',e:'Why — essential question word'},
+    ],
+    tip:'"Khít-tǔeng" (คิดถึง) means I miss you / I\'m thinking of you — one of the most emotionally useful phrases you\'ll learn. You\'ll hear it everywhere once you know it.',
+  },
+  {
+    title:'ชอบตัวเองตอนอยู่กับเธอ',sub:'Châwp dtua-ayng dtawn yùu gàp ter — I Like Us',artist:'Billkin',year:'2022',
+    am:'https://music.apple.com/us/song/%E0%B8%8A%E0%B8%AD%E0%B8%9A%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B9%80%E0%B8%AD%E0%B8%87%E0%B8%95%E0%B8%AD%E0%B8%99%E0%B8%AD%E0%B8%A2%E0%B8%B9%E0%B9%88%E0%B8%81%E0%B8%B1%E0%B8%9A%E0%B9%80%E0%B8%98%E0%B8%AD/1635564114',
+    genius:'https://genius.com/search?q=Billkin+ชอบตัวเองตอนอยู่กับเธอ',
+    context:'One of Billkin\'s most personal songs — about liking who you are when you\'re with someone. The lyrics are conversational and very close to everyday Thai speech, making this one of the best to study.',
+    excerpt:[
+      {t:'ชอบตัวเองเวลาที่อยู่กับเธอ',r:'châwp dtua-ayng weh-laa têe yùu gàp ter',e:'I like myself when I\'m with you',key:true},
+      {t:'ชอบที่ฉันเป็นตอนอยู่กับเธอ',r:'châwp têe chǎn bpen dtawn yùu gàp ter',e:'I like who I am when I\'m with you',key:true},
+      {t:'เหมือนฉันได้กลายมาเป็นอีกคนที่ดีกว่าเดิม',r:'mǔean chǎn dâai glaai maa bpen èek khon têe dee gwàa derm',e:'Like I\'ve become a better person',key:true},
+      {t:'ชอบตัวเธอตอนอยู่กับฉัน',r:'châwp dtua ter dtawn yùu gàp chǎn',e:'I like you when you\'re with me',key:false},
+      {t:'ชอบเวลาที่เรามีกัน',r:'châwp weh-laa têe rao mee gan',e:'I like the time we have together',key:false},
+      {t:'เป็นคนหนึ่งคนที่ไม่ได้ดีอะไร',r:'bpen khon nèung khon têe mâi dâai dee a-rai',e:'I\'m just a person who\'s nothing special',key:false},
+      {t:'บางทีก็ใจร้อน บางทีก็ใจร้าย',r:'baang tee gâw jai rón baang tee gâw jai ráai',e:'Sometimes hot-headed, sometimes unkind',key:false},
+      {t:'เธอทำให้คนที่ไม่มีหัวใจ',r:'ter tam hâi khon têe mâi mee hǔa jai',e:'You make someone with no heart',key:false},
+    ],
+    words:[
+      {t:'ชอบ',r:'châwp',e:'Like — softer than love, used for preferences'},
+      {t:'ตัวเอง',r:'dtua-ayng',e:'Oneself / myself'},
+      {t:'เวลาที่',r:'weh-laa têe',e:'When / at the time that'},
+      {t:'เหมือน',r:'mǔean',e:'Like / as if — used constantly in comparisons'},
+      {t:'กลาย',r:'glaai',e:'Become / transform'},
+      {t:'ดีกว่า',r:'dee gwàa',e:'Better than'},
+    ],
+    tip:'"Châwp" (ชอบ) is used far more in Thai than English "like" — for food, activities, people, everything. "Châwp aa-hǎan thai" = I like Thai food. Start dropping it into daily thought.',
+  },
+  {
+    title:'โคตรพิเศษ',sub:'Khôht pí-sàyt — Incredibly Special',artist:'Billkin',year:'2020',
+    am:'https://music.apple.com/us/song/%E0%B9%82%E0%B8%84%E0%B8%95%E0%B8%A3%E0%B8%9E%E0%B8%B4%E0%B9%80%E0%B8%A8%E0%B8%A9-from-%E0%B9%81%E0%B8%9B%E0%B8%A5%E0%B8%A3%E0%B8%B1%E0%B8%81%E0%B8%89%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B9%89%E0%B8%A7%E0%B8%A2%E0%B9%83%E0%B8%88%E0%B9%80%E0%B8%98%E0%B8%AD-original-soundtrack/1577034184',
+    genius:'https://genius.com/search?q=Billkin+โคตรพิเศษ',
+    context:'Also from "I Told Sunset About You" — "โคตร" is Thai slang for "extremely" (like "hella"). Great for learning how Thais express intensity. The gentle melody gives you time to catch each word.',
+    excerpt:[
+      {t:'เธอนั้นโคตรพิเศษ',r:'ter nán khôht pí-sàyt',e:'You are incredibly special',key:true},
+      {t:'ในดวงใจฉัน',r:'nai duang jai chǎn',e:'In my heart',key:true},
+      {t:'ไม่มีใครเหมือน',r:'mâi mee khrai mǔean',e:'No one is like you',key:true},
+      {t:'ฉันรู้ดีกว่าใคร',r:'chǎn róo dee gwàa khrai',e:'I know better than anyone',key:true},
+      {t:'เธอสำคัญกับฉันมากแค่ไหน',r:'ter sǎm-khan gàp chǎn mâak khâe nǎi',e:'How important you are to me',key:false},
+      {t:'คงบอกไม่ถูกหรอก',r:'khong bàwk mâi tùuk ràwk',e:'I probably can\'t put it into words',key:false},
+      {t:'แค่รู้ว่าไม่มีวันลืม',r:'khâe róo wâa mâi mee wan leum',e:'Just know I\'ll never forget',key:false},
+      {t:'รักเธอคนเดียวเสมอ',r:'rák ter khon diaw sa-mǒe',e:'I\'ll always love only you',key:false},
+    ],
+    words:[
+      {t:'โคตร',r:'khôht',e:'Extremely / hella — casual slang intensifier'},
+      {t:'พิเศษ',r:'pí-sàyt',e:'Special — also "special offer" in shops'},
+      {t:'ดวงใจ',r:'duang jai',e:'Heart (poetic) — "jai" = heart'},
+      {t:'ไม่มีใคร',r:'mâi mee khrai',e:'No one — "mâi mee" = there isn\'t'},
+      {t:'รู้ดี',r:'róo dee',e:'Know well'},
+      {t:'กว่าใคร',r:'gwàa khrai',e:'More than anyone'},
+    ],
+    tip:'"โคตร" (khôht) is one of the most useful slang words you\'ll learn. Thais say it like "super" or "hella". "Khôht dee!" = super good! You\'ll hear it everywhere.',
+  },
+];
+
+const SCREEN_META={
+  home:['Thai','Your learning hub'],
+  lessons:['Lessons','15-min commute lesson'],
+  song:['Song','Weekly breakdown'],
+  notes:['Notes','Your learning diary'],
+  cards:['Flashcards','Quick vocab review'],
+  resources:['More','Resources & tools'],
+  settings:['Settings','Backup & setup'],
+};
+
+let currentLesson=0,currentSong=0;
+let st={checks:{},sessions:0,lessonsDone:[],streak:0,notes:[],phase:1};
+
+function loadState(){try{const s=localStorage.getItem('thai-hub-v3');if(s)st=JSON.parse(s);}catch(e){}}
+function saveState(){try{localStorage.setItem('thai-hub-v3',JSON.stringify(st));}catch(e){}}
+
+function render(){
+  document.getElementById('ov-lessons').textContent=st.lessonsDone.length;
+  document.getElementById('ov-sessions').textContent=st.sessions;
+  document.getElementById('ov-streak').textContent=st.streak;
+  const prog=Math.min(100,Math.round((st.lessonsDone.length/LESSONS.length)*100));
+  document.getElementById('ov-prog').style.width=prog+'%';
+  document.getElementById('ov-phase-lbl').textContent='Week '+(st.lessonsDone.length+1)+' of '+LESSONS.length;
+  const pi=(new Date().getDay()+st.sessions)%PROMPTS.length;
+  const pr=PROMPTS[pi];
+  document.getElementById('ov-prompt').textContent=pr.t;
+  document.getElementById('ov-chips').innerHTML=pr.a.map((a,i)=>`<span class="chip ${pr.c[i]||'cg'}">${a}</span>`).join('');
+
+  const cb=document.getElementById('chat-banner-container');
+  if(st.sessions>0&&st.sessions%5===0){
+    cb.innerHTML=`<div class="chat-banner"><div class="chat-banner-title">🎤 Time to practise speaking!</div><div class="chat-banner-body">You've done ${st.sessions} sessions — great work! Come chat with Claude as a native Thai speaker, or pick a Billkin song to break down together.</div><a href="https://claude.ai" target="_blank" class="btn-main" style="background:var(--gd);">Chat with Claude ↗</a></div>`;
+  } else {cb.innerHTML='';}
+
+  const cl=document.getElementById('checklist');
+  if(cl)cl.innerHTML=CHECKS.map(c=>`<div class="chk-row" onclick="toggleCheck('${c.id}')"><div class="chk-box ${st.checks[c.id]?'on':''}"><div class="tick"></div></div><div style="flex:1;"><div class="chk-lbl ${st.checks[c.id]?'done':''}">${c.l}</div><div class="chk-sub">${c.s}</div></div></div>`).join('');
+
+  const nl=document.getElementById('notes-list');
+  if(nl)renderNotesList();
+
+  renderLesson();renderSong();
+}
+
+function renderLesson(){
+  const l=LESSONS[currentLesson];
+  document.getElementById('lesson-week').textContent='Week '+l.week;
+  document.getElementById('lesson-sub').textContent=l.title;
+  document.getElementById('lb-prev').disabled=currentLesson===0;
+  document.getElementById('lb-next').disabled=currentLesson===LESSONS.length-1;
+  const done=st.lessonsDone.includes(l.week);
+  let h='';
+  l.steps.forEach(s=>{
+    h+=`<div class="card" style="margin-bottom:10px;"><span class="step-tag ${s.tag}">${s.label}</span><div class="step-title">${s.title}</div>`;
+    if(s.body)h+=`<div class="step-body">${s.body}</div>`;
+    if(s.phrases){
+      h+=`<div style="margin-top:10px;">`;
+      s.phrases.forEach(p=>{
+        const enc=encodeURIComponent(p.t);
+        h+=`<div class="phrase-row"><div class="phrase-texts"><div class="phrase-thai">${p.t}</div><div class="phrase-rom">${p.r}</div><div class="phrase-eng">${p.e}</div></div><button class="speak-btn" onclick="speakThai('${enc}',this)">🔊</button></div>`;
+      });
+      h+=`</div>`;
+    }
+    h+=`</div>`;
+  });
+  if(done)h+=`<div class="tip-box" style="background:var(--gl);color:var(--gd);">✓ Lesson completed! Review anytime.</div>`;
+  document.getElementById('lesson-content').innerHTML=h;
+}
+
+function renderSong(){
+  const s=SONGS[currentSong];
+  document.getElementById('song-title').textContent=s.title;
+  document.getElementById('song-sub').textContent=s.sub;
+  document.getElementById('song-am-link').href=s.am;
+  document.getElementById('sb-prev').disabled=currentSong===0;
+  document.getElementById('sb-next').disabled=currentSong===SONGS.length-1;
+  let h='';
+
+  // About
+  h+=`<div class="lyric-block"><div class="slabel" style="margin-bottom:8px;">About this song</div><div class="step-body">${s.context}</div></div>`;
+
+  // Excerpt with highlights
+  h+=`<div class="lyric-block">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <div class="slabel" style="margin:0;">Lyrics excerpt</div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--gl);border:1px solid var(--green);"></span>
+        <span style="font-size:10px;color:var(--text-3);">= key line</span>
+      </div>
+    </div>`;
+  s.excerpt.forEach(l=>{
+    const enc=encodeURIComponent(l.t);
+    const highlight=l.key?`style="background:var(--gl);border-radius:8px;padding:8px 10px;margin:-2px -4px;"`:'';
+    h+=`<div class="lyric-line" style="display:flex;align-items:flex-start;gap:10px;">
+      <div style="flex:1;" ${highlight}>
+        <div class="lyric-thai">${l.t}${l.key?` <span style="font-size:9px;color:var(--gd);font-weight:500;vertical-align:middle;">KEY</span>`:''}
+        </div>
+        <div class="lyric-rom">${l.r}</div>
+        <div class="lyric-eng">${l.e}</div>
+      </div>
+      <button class="speak-btn" onclick="speakThai('${enc}',this)" style="margin-top:4px;flex-shrink:0;">🔊</button>
+    </div>`;
+  });
+  h+=`<a href="${s.genius}" target="_blank" style="display:block;margin-top:12px;font-size:12px;color:var(--blue);text-decoration:none;text-align:center;">View full lyrics on Genius ↗</a>`;
+  h+=`</div>`;
+
+  // Word breakdown
+  h+=`<div class="lyric-block"><div class="slabel" style="margin-bottom:10px;">Word breakdown</div>`;
+  s.words.forEach(w=>{h+=`<div class="word-row"><div class="word-thai">${w.t}</div><div style="flex:1;"><div class="word-rom">${w.r}</div><div class="word-eng">${w.e}</div></div></div>`;});
+  h+=`</div>`;
+
+  h+=`<div class="tip-box" style="background:var(--al);color:var(--amber);">🎵 ${s.tip}</div>`;
+  document.getElementById('song-content').innerHTML=h;
+}
+
+// TTS
+let curUtter=null;
+function speakThai(enc,btn){
+  const text=decodeURIComponent(enc);
+  if(curUtter){window.speechSynthesis.cancel();curUtter=null;document.querySelectorAll('.speak-btn.playing').forEach(b=>{b.classList.remove('playing');b.textContent='🔊';});}
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='th-TH';u.rate=0.85;u.pitch=1;
+  const voices=window.speechSynthesis.getVoices();
+  const tv=voices.find(v=>v.lang==='th-TH'||v.lang.startsWith('th'));
+  if(tv)u.voice=tv;
+  u.onstart=()=>{btn.classList.add('playing');btn.textContent='⏸';curUtter=u;};
+  u.onend=u.onerror=()=>{btn.classList.remove('playing');btn.textContent='🔊';curUtter=null;};
+  window.speechSynthesis.speak(u);
+}
+if(window.speechSynthesis)window.speechSynthesis.getVoices();
+
+function nav(key,el){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(b=>b.classList.remove('active'));
+  document.getElementById('s-'+key).classList.add('active');
+  el.classList.add('active');
+  const m=SCREEN_META[key];
+  document.getElementById('topbar-title').textContent=m[0];
+  document.getElementById('topbar-sub').textContent=m[1];
+  window.scrollTo(0,0);
+  if(key==='settings')updatePhaseButtons();
+  if(key==='cards')fcInit();
+  if(window.speechSynthesis)window.speechSynthesis.cancel();
+}
+
+function changeLesson(d){currentLesson=Math.max(0,Math.min(LESSONS.length-1,currentLesson+d));renderLesson();}
+function changeSong(d){currentSong=Math.max(0,Math.min(SONGS.length-1,currentSong+d));renderSong();}
+
+function logLesson(){
+  const w=LESSONS[currentLesson].week;
+  if(!st.lessonsDone.includes(w)){
+    st.lessonsDone.push(w);st.sessions++;st.streak=Math.min(52,st.streak+1);
+    saveState();render();showToast('Week '+w+' done! เก่งมาก 🎉');
+    if(st.sessions%5===0)setTimeout(()=>showToast('5 sessions! Time to chat with Claude 🎤'),2500);
+  } else {showToast('Already logged — keep going!');}
+}
+
+function logSession(){
+  st.sessions++;st.streak=Math.min(52,st.streak+1);
+  saveState();render();showToast('Session logged! ก้าวหน้า 🎉');
+  if(st.sessions%5===0)setTimeout(()=>showToast('5 sessions! Chat with Claude 🎤'),2500);
+}
+
+function toggleCheck(id){st.checks[id]=!st.checks[id];saveState();render();}
+
+let activeNoteFilter='all';
+
+function renderNotesList(filter){
+  if(filter)activeNoteFilter=filter;
+  const nl=document.getElementById('notes-list');
+  if(!nl)return;
+  const notes=(st.notes||[]).map(n=>({...n,type:'note'}));
+  const wilds=(st.wilds||[]).map(w=>({...w,type:'wild'}));
+  const all=[...notes,...wilds].sort((a,b)=>(b.ts||0)-(a.ts||0));
+  const filtered=activeNoteFilter==='all'?all:all.filter(n=>n.type===activeNoteFilter);
+  if(filtered.length===0){nl.innerHTML='<div class="empty-state">Nothing here yet — add your first entry above!</div>';return;}
+  nl.innerHTML=filtered.map(n=>{
+    if(n.type==='wild'){
+      const wi=(st.wilds||[]).findIndex(w=>w.ts===n.ts);
+      return `<div class="wild-card">
+        <div class="wild-card-header"><span class="wild-badge">🌿 Caught in the wild</span><span class="note-del" onclick="delWild(${wi})">Delete</span></div>
+        <div class="wild-thai">${n.thai.replace(/</g,'&lt;')}</div>
+        ${n.guess?`<div class="wild-section"><div class="wild-section-lbl">Your guess</div><div class="wild-section-val guess">${n.guess.replace(/</g,'&lt;')}</div></div>`:''}
+        <div class="wild-section"><div class="wild-section-lbl">Actual meaning</div><div class="wild-section-val actual">${n.actual.replace(/</g,'&lt;')}</div></div>
+        ${n.context?`<div class="wild-section"><div class="wild-section-lbl">Context</div><div class="wild-section-val">${n.context.replace(/</g,'&lt;')}</div></div>`:''}
+        <div class="note-meta" style="margin-top:8px;margin-bottom:0;"><span>${n.date}</span></div>
+      </div>`;
+    } else {
+      const ni=(st.notes||[]).findIndex(x=>x.ts===n.ts);
+      return `<div class="note-card">
+        <div class="note-meta"><span>${n.date}</span><span class="note-del" onclick="delNote(${ni})">Delete</span></div>
+        <div class="note-body">${n.text.replace(/</g,'&lt;')}</div>
+      </div>`;
+    }
+  }).join('');
+}
+
+function switchNoteType(type,btn){
+  document.querySelectorAll('.note-type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('note-form').style.display=type==='note'?'block':'none';
+  document.getElementById('wild-form').style.display=type==='wild'?'block':'none';
+}
+
+function filterNotes(filter,btn){
+  document.querySelectorAll('#s-notes .fc-tag').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderNotesList(filter);
+}
+
+function saveNote(){
+  const t=document.getElementById('note-input').value.trim();
+  if(!t)return;
+  const d=new Date().toLocaleDateString('en-SG',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  st.notes=st.notes||[];
+  st.notes.push({date:d,ts:Date.now(),text:t});
+  document.getElementById('note-input').value='';
+  saveState();renderNotesList();showToast('Note saved!');
+}
+
+function saveWild(){
+  const thai=document.getElementById('wild-thai').value.trim();
+  const actual=document.getElementById('wild-actual').value.trim();
+  if(!thai||!actual){showToast('Thai text and actual meaning are required');return;}
+  const d=new Date().toLocaleDateString('en-SG',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  st.wilds=st.wilds||[];
+  st.wilds.push({
+    date:d,ts:Date.now(),thai,
+    guess:document.getElementById('wild-guess').value.trim(),
+    actual,
+    context:document.getElementById('wild-context').value.trim(),
+  });
+  ['wild-thai','wild-guess','wild-actual','wild-context'].forEach(id=>document.getElementById(id).value='');
+  saveState();renderNotesList();showToast('Catch saved! 🌿');
+}
+
+function delNote(i){if(!confirm('Delete this note?'))return;(st.notes||[]).splice(i,1);saveState();renderNotesList();}
+function delWild(i){if(!confirm('Delete this catch?'))return;(st.wilds||[]).splice(i,1);saveState();renderNotesList();}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+function updatePhaseButtons(){document.querySelectorAll('.pb[id^="pb"]').forEach((b,i)=>b.classList.toggle('active',i+1===st.phase));}
+function setPhase(n){st.phase=n;saveState();render();updatePhaseButtons();showToast('Phase set to '+n);}
+
+function exportData(){
+  const j=JSON.stringify(st,null,2);
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(j).then(()=>showToast('Copied!')).catch(()=>showExportBox(j));}
+  else showExportBox(j);
+}
+function showExportBox(j){
+  const ex=document.getElementById('export-box');if(ex)ex.remove();
+  const b=document.createElement('div');b.id='export-box';b.className='export-box';b.textContent=j;
+  b.onclick=()=>{const s=window.getSelection(),r=document.createRange();r.selectNodeContents(b);s.removeAllRanges();s.addRange(r);};
+  document.querySelector('#s-settings .card').appendChild(b);
+  showToast('Tap box to select all & copy');
+}
+function importData(){
+  const raw=document.getElementById('import-input').value.trim();
+  if(!raw){showToast('Paste backup text first');return;}
+  try{const p=JSON.parse(raw);if(typeof p.sessions==='undefined')throw 0;if(!confirm('Overwrite current data?'))return;st=p;saveState();render();document.getElementById('import-input').value='';showToast('Data restored!');}
+  catch(e){showToast('Invalid backup — check and retry');}
+}
+function resetAll(){if(!confirm('Reset ALL data? Cannot be undone.'))return;st={checks:{},sessions:0,lessonsDone:[],streak:0,notes:[],phase:1};saveState();render();showToast('All data cleared');}
+
+// ── FLASHCARDS ────────────────────────────────────────────────────────
+const ALL_CARDS=[
+  // Greetings
+  {t:'สวัสดี',r:'sa-wat-dee',e:'Hello / Goodbye',cat:'Greetings'},
+  {t:'ขอบคุณ',r:'khàwp-khun',e:'Thank you',cat:'Greetings'},
+  {t:'ไม่เป็นไร',r:'mâi bpen rai',e:'No worries',cat:'Greetings'},
+  {t:'ใช่',r:'châi',e:'Yes',cat:'Greetings'},
+  {t:'ไม่ใช่',r:'mâi châi',e:'No / Is not',cat:'Greetings'},
+  {t:'ขอโทษ',r:'khǎaw thôht',e:'Sorry / Excuse me',cat:'Greetings'},
+  // Numbers
+  {t:'หนึ่ง',r:'nèung',e:'1',cat:'Numbers'},
+  {t:'สอง',r:'sǎwng',e:'2',cat:'Numbers'},
+  {t:'สาม',r:'sǎam',e:'3',cat:'Numbers'},
+  {t:'สี่',r:'sèe',e:'4',cat:'Numbers'},
+  {t:'ห้า',r:'hâa',e:'5',cat:'Numbers'},
+  {t:'สิบ',r:'sìp',e:'10',cat:'Numbers'},
+  {t:'ร้อย',r:'rói',e:'100',cat:'Numbers'},
+  {t:'เท่าไร',r:'tâo-rài',e:'How much?',cat:'Numbers'},
+  // Food
+  {t:'อร่อย',r:'a-ròi',e:'Delicious',cat:'Food'},
+  {t:'ไม่เผ็ด',r:'mâi pèt',e:'Not spicy',cat:'Food'},
+  {t:'น้ำเปล่า',r:'náam bplào',e:'Plain water',cat:'Food'},
+  {t:'ข้าว',r:'khâaw',e:'Rice',cat:'Food'},
+  {t:'ไก่',r:'gài',e:'Chicken',cat:'Food'},
+  {t:'เก็บเงิน',r:'gèp ngern',e:'Bill please',cat:'Food'},
+  // Feelings
+  {t:'ดีใจ',r:'dee jai',e:'Happy',cat:'Feelings'},
+  {t:'ตื่นเต้น',r:'dtèun dtên',e:'Excited',cat:'Feelings'},
+  {t:'รัก',r:'rák',e:'Love',cat:'Feelings'},
+  {t:'ชอบ',r:'châwp',e:'Like',cat:'Feelings'},
+  {t:'เหนื่อย',r:'nèuai',e:'Tired',cat:'Feelings'},
+  {t:'สนุก',r:'sa-nùk',e:'Fun',cat:'Feelings'},
+  {t:'โคตร',r:'khôht',e:'Extremely / hella (slang)',cat:'Feelings'},
+  // Getting around
+  {t:'ไปที่',r:'bpai têe',e:'Go to',cat:'Travel'},
+  {t:'จอดตรงนี้',r:'jàwt dtrong née',e:'Stop here',cat:'Travel'},
+  {t:'ซ้าย',r:'sáai',e:'Left',cat:'Travel'},
+  {t:'ขวา',r:'khwǎa',e:'Right',cat:'Travel'},
+  {t:'ใกล้',r:'glâi',e:'Near',cat:'Travel'},
+  {t:'ไกล',r:'glai',e:'Far',cat:'Travel'},
+  // Song words
+  {t:'อยาก',r:'yàak',e:'Want',cat:'Song words'},
+  {t:'คิดถึง',r:'khít-tǔeng',e:'Miss / think of',cat:'Song words'},
+  {t:'ใจ',r:'jai',e:'Heart',cat:'Song words'},
+  {t:'รอ',r:'raw',e:'Wait',cat:'Song words'},
+  {t:'ยัง',r:'yang',e:'Still',cat:'Song words'},
+  {t:'เหมือน',r:'mǔean',e:'Like / as if',cat:'Song words'},
+  {t:'พิเศษ',r:'pí-sàyt',e:'Special',cat:'Song words'},
+  {t:'ทองคำ',r:'tawng-kam',e:'Golden',cat:'Song words'},
+];
+
+const FC_CATS=[...new Set(ALL_CARDS.map(c=>c.cat))];
+let fcActiveCats=new Set(FC_CATS);
+let fcDeck=[],fcIdx=0,fcFlipped_=false,fcSessionGot=0;
+
+function fcInit(){
+  // Render category filter chips
+  const f=document.getElementById('fc-filter');
+  f.innerHTML=FC_CATS.map(cat=>`<button class="fc-tag on" onclick="fcToggleCat('${cat}',this)">${cat}</button>`).join('');
+  fcBuildDeck();
+}
+
+function fcToggleCat(cat,btn){
+  if(fcActiveCats.has(cat)){
+    if(fcActiveCats.size===1){showToast('Keep at least one category');return;}
+    fcActiveCats.delete(cat);btn.classList.remove('on');
+  } else {
+    fcActiveCats.add(cat);btn.classList.add('on');
+  }
+  fcBuildDeck();
+}
+
+function fcBuildDeck(){
+  fcDeck=ALL_CARDS.filter(c=>fcActiveCats.has(c.cat));
+  fcShuffle_();
+  fcIdx=0;fcSessionGot=0;fcFlipped_=false;
+  fcRender();
+}
+
+function fcShuffle_(){
+  for(let i=fcDeck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[fcDeck[i],fcDeck[j]]=[fcDeck[j],fcDeck[i]];}
+}
+
+function fcShuffle(){fcBuildDeck();showToast('Deck shuffled!');}
+
+function fcRender(){
+  if(!fcDeck.length)return;
+  const c=fcDeck[fcIdx];
+  // Reset flip
+  const card=document.getElementById('fc-card');
+  card.classList.remove('flipped');
+  fcFlipped_=false;
+  setTimeout(()=>{
+    document.getElementById('fc-cat').textContent=c.cat;
+    document.getElementById('fc-thai').textContent=c.t;
+    document.getElementById('fc-rom').textContent=c.r;
+    document.getElementById('fc-eng').textContent=c.e;
+  },fcFlipped_?230:0);
+  document.getElementById('fc-counter').textContent='Card '+(fcIdx+1)+' of '+fcDeck.length;
+  const pct=Math.round((fcSessionGot/fcDeck.length)*100);
+  document.getElementById('fc-prog').style.width=pct+'%';
+  document.getElementById('fc-prog-label').textContent=fcSessionGot+' of '+fcDeck.length+' done this session';
+  document.getElementById('ov-lessons'); // keep score updated via main render
+}
+
+function fcFlip(){
+  const card=document.getElementById('fc-card');
+  fcFlipped_=!fcFlipped_;
+  card.classList.toggle('flipped',fcFlipped_);
+}
+
+function fcSpeak(){
+  if(!fcDeck.length)return;
+  const enc=encodeURIComponent(fcDeck[fcIdx].t);
+  speakThai(enc,document.getElementById('fc-speak-btn'));
+}
+
+function fcGot(){
+  fcSessionGot++;
+  st.fcLearned=st.fcLearned||{};
+  st.fcLearned[fcDeck[fcIdx].t]=true;
+  document.getElementById('ov-lessons'); // re-calc in render
+  if(fcIdx<fcDeck.length-1){fcIdx++;fcFlipped_=false;document.getElementById('fc-card').classList.remove('flipped');setTimeout(fcRender,50);}
+  else{showToast('Deck complete! 🎉 '+ fcSessionGot+'/'+fcDeck.length+' correct');fcSessionGot=0;fcIdx=0;fcShuffle_();fcRender();}
+  saveState();
+}
+
+function fcAgain(){
+  // Move current card to end of deck for another chance
+  const card=fcDeck.splice(fcIdx,1)[0];
+  fcDeck.push(card);
+  if(fcIdx>=fcDeck.length)fcIdx=0;
+  document.getElementById('fc-card').classList.remove('flipped');
+  fcFlipped_=false;
+  setTimeout(fcRender,50);
+}
+
+loadState();
+fcInit();
+render();
+</script>
+</body>
+</html>
